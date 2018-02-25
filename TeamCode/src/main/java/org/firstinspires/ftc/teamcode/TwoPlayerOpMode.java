@@ -50,8 +50,8 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "Main OpMode", group = "Iterative Opmode")
-public class MainOpMode extends OpMode {
+@TeleOp(name = "Two Player OpMode", group = "Iterative Opmode")
+public class TwoPlayerOpMode extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
@@ -143,18 +143,18 @@ public class MainOpMode extends OpMode {
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
 
-        if (gamepad1.right_bumper)
+        if (gamepad2.right_bumper)
             clawOffset += CLAW_SPEED;
-        else if (gamepad1.left_bumper)
+        else if (gamepad2.left_bumper)
             clawOffset -= CLAW_SPEED;
 
         clawOffset = Range.clip(clawOffset, -0.5, 0.5);
         leftHand.setPosition(MID_SERVO + clawOffset);
         rightHand.setPosition(MID_SERVO - clawOffset);
 
-        if (gamepad1.y)
+        if (gamepad2.y)
             armDrive.setPower(ARM_UP_POWER);
-        else if (gamepad1.a)
+        else if (gamepad2.a)
             armDrive.setPower(ARM_DOWN_POWER);
         else
             armDrive.setPower(0);
