@@ -60,6 +60,8 @@ public class TwoPlayerOpMode extends OpMode {
     private Servo leftHand = null;
     private Servo rightHand = null;
 
+    private boolean dirctionToggle = true;
+
     private static final double MID_SERVO = 0.5;
     private static final double ARM_DOWN_POWER = 0.20;
     private static final double ARM_UP_POWER = -0.20;
@@ -124,6 +126,7 @@ public class TwoPlayerOpMode extends OpMode {
         double leftPower;
         double rightPower;
 
+
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -136,8 +139,17 @@ public class TwoPlayerOpMode extends OpMode {
 
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        leftPower = -gamepad1.left_stick_y;
-        rightPower = -gamepad1.right_stick_y;
+        if (dirctionToggle) {
+            leftPower = -gamepad1.left_stick_y;
+            rightPower = -gamepad1.right_stick_y;
+        } else {
+            leftPower = gamepad1.left_stick_y;
+            rightPower = gamepad1.right_stick_y;
+        }
+
+        if (gamepad1.left_bumper) {
+            dirctionToggle = !dirctionToggle;
+        }
 
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
