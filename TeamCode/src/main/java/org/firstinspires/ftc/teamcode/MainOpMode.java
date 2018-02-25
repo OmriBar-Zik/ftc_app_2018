@@ -57,6 +57,7 @@ public class MainOpMode extends OpMode
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor armDrive = null;
     private Servo leftHand = null;
     private Servo rightHand = null;
 
@@ -79,13 +80,14 @@ public class MainOpMode extends OpMode
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-
+        armDrive = hardwareMap.get(DcMotor.class,"arm");
         leftHand = hardwareMap.get(Servo.class,"left_clap");
         rightHand = hardwareMap.get(Servo.class,"right_clap");
 
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -151,6 +153,12 @@ public class MainOpMode extends OpMode
         leftHand.setPosition(MID_SERVO + clawOffset);
         rightHand.setPosition(MID_SERVO - clawOffset);
 
+        if (gamepad2.y)
+            armDrive.setPower(ARM_UP_POWER);
+        else if (gamepad2.a)
+            armDrive.setPower(ARM_DOWN_POWER);
+        else
+            armDrive.setPower(0);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("claw",  "Offset = %.2f", clawOffset);
