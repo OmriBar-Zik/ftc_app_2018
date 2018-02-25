@@ -42,17 +42,16 @@ import com.qualcomm.robotcore.util.Range;
  * The names of OpModes appear on the menu of the FTC Driver Station.
  * When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all iterative OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Main OpMode", group="Iterative Opmode")
-public class MainOpMode extends OpMode
-{
+@TeleOp(name = "Main OpMode", group = "Iterative Opmode")
+public class MainOpMode extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
@@ -61,12 +60,12 @@ public class MainOpMode extends OpMode
     private Servo leftHand = null;
     private Servo rightHand = null;
 
-    public static final double MID_SERVO       =  0.5 ;
-    public static final double ARM_UP_POWER    =  0.45 ;
-    public static final double ARM_DOWN_POWER  = -0.45 ;
+    public static final double MID_SERVO = 0.5;
+    public static final double ARM_DOWN_POWER = 0.20;
+    public static final double ARM_UP_POWER = -0.20;
 
-    double          clawOffset  = 0.0 ;                  // Servo mid position
-    final double    CLAW_SPEED  = 0.02 ;
+    double clawOffset = 0.0;                  // Servo mid position
+    final double CLAW_SPEED = 0.02;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -78,11 +77,11 @@ public class MainOpMode extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        armDrive = hardwareMap.get(DcMotor.class,"arm");
-        leftHand = hardwareMap.get(Servo.class,"left_clap");
-        rightHand = hardwareMap.get(Servo.class,"right_clap");
+        armDrive = hardwareMap.get(DcMotor.class, "arm");
+        leftHand = hardwareMap.get(Servo.class, "left_clap");
+        rightHand = hardwareMap.get(Servo.class, "right_clap");
 
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -130,15 +129,15 @@ public class MainOpMode extends OpMode
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.left_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        //double drive = -gamepad1.left_stick_y;
+        //double turn  =  gamepad1.left_stick_x;
+        //leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+        //rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
+        leftPower = -gamepad1.left_stick_y;
+        rightPower = -gamepad1.right_stick_y;
 
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
@@ -153,15 +152,15 @@ public class MainOpMode extends OpMode
         leftHand.setPosition(MID_SERVO + clawOffset);
         rightHand.setPosition(MID_SERVO - clawOffset);
 
-        if (gamepad2.y)
+        if (gamepad1.y)
             armDrive.setPower(ARM_UP_POWER);
-        else if (gamepad2.a)
+        else if (gamepad1.a)
             armDrive.setPower(ARM_DOWN_POWER);
         else
             armDrive.setPower(0);
 
         // Show the elapsed game time and wheel power.
-        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
+        telemetry.addData("claw", "Offset = %.2f", clawOffset);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
     }
